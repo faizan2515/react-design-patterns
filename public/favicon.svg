@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="React Design Patterns">
+  <rect width="32" height="32" rx="7" fill="#aa3bff"/>
+  <g fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11.6 10.6 7.4 16l4.2 5.4"/>
+    <path d="M18.8 9.8 13.2 22.2"/>
+    <path d="M20.4 10.6 24.6 16l-4.2 5.4"/>
+  </g>
+</svg>

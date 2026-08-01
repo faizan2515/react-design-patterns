@@ -1,0 +1,227 @@
+@import "tailwindcss";
+
+/*
+  Two variable faces, latin subset only, self-hosted. See OFL-NOTICE.md in the fonts
+  folder. Martian Mono is engineered and wide — it carries the display voice. JetBrains
+  Mono is drawn for code legibility and does the reading work. Prose stays on the system
+  sans: the personality here belongs to the monospace.
+*/
+@font-face {
+  font-family: "Martian Mono";
+  src: url("./assets/fonts/martian-mono-latin.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("./assets/fonts/jetbrains-mono-latin.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/*
+  Semantic tokens, each declared once with both values via `light-dark()`.
+
+  Which branch applies is decided entirely by `color-scheme`, so the theme toggle only has
+  to change that one property on <html> — there is no second copy of the palette to keep in
+  step, and no `.dark` class threaded through the markup.
+
+  `color-scheme: light dark` means "follow the OS". The toggle narrows it to one value,
+  which is also what makes native scrollbars, form controls and focus rings follow along.
+
+  Components should not need `dark:` variants — if you reach for one, a token is missing.
+*/
+:root {
+  --rdp-bg: light-dark(#ffffff, #16171d);
+  --rdp-surface: light-dark(#ffffff, #1b1c23);
+  --rdp-surface-2: light-dark(#faf9fb, #1f2028);
+  --rdp-fg: light-dark(#08060d, #f3f4f6);
+  --rdp-muted: light-dark(#6b6375, #9ca3af);
+  --rdp-line: light-dark(#e5e4e7, #2e303a);
+  --rdp-code-bg: light-dark(#f7f6f3, #14151a);
+  /* The demo stage reads as a lit specimen bay, distinct from ordinary surfaces. */
+  --rdp-stage: light-dark(#fbfaff, #1d1a26);
+  --rdp-accent: light-dark(#aa3bff, #c084fc);
+  --rdp-accent-fg: light-dark(#ffffff, #16171d);
+  --rdp-accent-soft: light-dark(rgba(170, 59, 255, 0.1), rgba(192, 132, 252, 0.15));
+  --rdp-accent-line: light-dark(rgba(170, 59, 255, 0.5), rgba(192, 132, 252, 0.5));
+
+  color-scheme: light dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Set by the toggle, and by the inline script in index.html before first paint. */
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/*
+  `inline` makes Tailwind emit the var() reference inside each utility rather than a copy
+  of the value, which is what keeps the tokens above live and switchable at runtime.
+*/
+@theme inline {
+  --color-bg: var(--rdp-bg);
+  --color-surface: var(--rdp-surface);
+  --color-surface-2: var(--rdp-surface-2);
+  --color-fg: var(--rdp-fg);
+  --color-muted: var(--rdp-muted);
+  --color-line: var(--rdp-line);
+  --color-code: var(--rdp-code-bg);
+  --color-stage: var(--rdp-stage);
+  --color-accent: var(--rdp-accent);
+  --color-accent-fg: var(--rdp-accent-fg);
+  --color-accent-soft: var(--rdp-accent-soft);
+  --color-accent-line: var(--rdp-accent-line);
+
+  --font-sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --font-display: "Martian Mono", "JetBrains Mono", ui-monospace, monospace;
+}
+
+/*
+  Martian Mono is drawn wide, so display sizes need negative tracking to stop headlines
+  sprawling, while the small instrument labels need the opposite — enough air that the
+  wide letterforms read as engraved rather than cramped.
+*/
+.u-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.045em;
+  font-weight: 500;
+}
+
+.u-label {
+  font-family: var(--font-display);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/*
+  Render-count flash. Applied to an element keyed by the count, so a new count remounts
+  the node and replays the animation from the start — no timers, no cleanup.
+*/
+@keyframes rdp-flash {
+  from {
+    background-color: var(--rdp-accent);
+    color: var(--rdp-accent-fg);
+  }
+  to {
+    background-color: transparent;
+    color: var(--rdp-fg);
+  }
+}
+
+.rdp-flash {
+  animation: rdp-flash 700ms ease-out;
+}
+
+/* Drawer entrance. The backdrop fades while the panel slides, so the two read as one move. */
+@keyframes rdp-slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes rdp-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.rdp-slide-in {
+  animation: rdp-slide-in 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rdp-fade-in {
+  animation: rdp-fade-in 240ms ease-out;
+}
+
+/* Used by the imperative-handle demo to prove a method on the handle actually ran. */
+@keyframes rdp-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+/*
+  Shiki emits every token with both palettes attached as custom properties and no
+  committed colour, so the theme switch below recolours code with no second render and
+  no highlighter in the bundle.
+*/
+.rdp-code .shiki {
+  margin: 0;
+  overflow: visible;
+  background: transparent !important;
+  font-family: var(--font-mono);
+}
+
+.rdp-code .shiki,
+.rdp-code .shiki span {
+  /* Same mechanism as the tokens: one declaration, resolved by `color-scheme`. */
+  color: light-dark(var(--shiki-light), var(--shiki-dark));
+}
+
+html {
+  background: var(--rdp-bg);
+}
+
+body {
+  margin: 0;
+}
+
+/* Thin themed scrollbars for the sidebar and code panels. */
+@supports (scrollbar-width: thin) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--rdp-line) transparent;
+  }
+}
+
+/*
+  Tailwind v4's reset stopped setting `cursor: pointer` on buttons, matching the raw
+  browser default. Restoring it here rather than adding a utility to every button — and in
+  `base`, so anything that genuinely wants a different cursor can still override it with a
+  utility class.
+*/
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  summary,
+  input[type="checkbox"],
+  input[type="range"] {
+    cursor: pointer;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--rdp-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
