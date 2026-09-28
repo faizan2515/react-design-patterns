@@ -3,7 +3,7 @@
 An interactive catalog of React design patterns. Every pattern is a component that actually
 runs, with the source that renders it displayed directly underneath.
 
-**[Live demo →](https://faizan2515.github.io/react-design-patterns/)**
+**[Live demo →](https://react-design-patterns.faizanraza.me/)**
 
 ## What's in it
 
@@ -75,10 +75,12 @@ fake network, and a deliberately slow component for performance demos.
 Pushing to `main` builds and publishes to GitHub Pages via `.github/workflows/deploy.yml`.
 Enable it once under **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
-The site is served from a subpath, so `vite.config.ts` sets a `base` for production builds
-and the router reads it back through `import.meta.env.BASE_URL`. If the repository is
-renamed, `BASE` in `vite.config.ts` is the only thing to change. The build also emits a
-`404.html` copy of `index.html`, which is what makes deep links survive a refresh on Pages.
+The site is served at `https://react-design-patterns.faizanraza.me/`, so `vite.config.ts`
+sets `base: "/"` for assets and the router reads it through `import.meta.env.BASE_URL`.
+Set **Settings > Pages > Custom domain** to `react-design-patterns.faizanraza.me`
+and point that subdomain's DNS CNAME record to `faizan2515.github.io`.
+`public/CNAME` also includes the custom domain in the build output.
+The build emits a `404.html` copy of `index.html` so deep links survive a refresh on Pages.
 
 ## Fonts
 

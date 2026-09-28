@@ -17,9 +17,8 @@ import { dismissSplash } from "./shell/splash";
   section, where double-invocation is the lesson rather than noise on top of one.
 */
 /*
-  Derived from Vite's base rather than hardcoded, so dev and the deployed subpath cannot
-  disagree. BASE_URL is "/" locally and "/react-design-patterns/" in the build; React
-  Router wants no trailing slash, hence the trim.
+  Keep the router aligned with Vite's asset base. The custom domain and local dev
+  both use "/". React Router wants no trailing slash, hence the trim.
 */
 const basename = import.meta.env.BASE_URL.replace(/\/+$/, "") || "/";
 
